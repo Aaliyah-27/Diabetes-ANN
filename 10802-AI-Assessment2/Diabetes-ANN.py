@@ -6,7 +6,7 @@ from tensorflow.keras.models import Sequential  # Import Sequential model from K
 from tensorflow.keras.layers import Dense, Dropout  # Import Dense and Dropout layers from Keras
 
 # Task 1: Read the data
-file_path =r'C:\\Users\\Aaliyah\\Documents\\Dataset of Diabetes .csv'  # Define the file path to the dataset (Update as required)
+file_path = r'C:\\Users\\Aaliyah\\Documents\\Dataset of Diabetes .csv'  # Define the file path to the dataset (Update as required)
 DataFrame = pd.read_csv(file_path)  # Read the dataset into a pandas DataFrame
 
 # Preliminary data inspection
@@ -55,8 +55,47 @@ model = Sequential([  # Initialize a Sequential model
     Dense(y_train.shape[1], activation='softmax')  # Add an output layer with units equal to number of classes and softmax activation
 ])
 
-# Compile the model
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])  # Compile the model with Adam optimizer and categorical crossentropy loss
+# Compile the model with Adam optimizer and categorical crossentropy loss
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-# Train the model
-history = model.fit(X_train, y_train, epochs=50, batch_size=32, validation_data=(X_test, y_test))  # Train the model with training data and validate with testing data
+# Train the model with training data and validate with testing data
+history = model.fit(X_train, y_train, epochs=50, batch_size=32, validation_data=(X_test, y_test))  
+import numpy as np  # Import NumPy for numerical operations
+import matplotlib.pyplot as plt  # Import Matplotlib for plotting
+from sklearn.metrics import confusion_matrix, classification_report  # Import metrics for model evaluation
+
+# Predict the test set
+y_pred = model.predict(X_test)  # Predict the output for the test set
+y_pred_classes = np.argmax(y_pred, axis=1)  # Convert predicted probabilities to class labels
+y_true = np.argmax(y_test.values, axis=1)  # Convert one-hot encoded true labels to class labels
+
+# Print unique values in y_true to verify actual classes
+print("Unique values in y_true:", np.unique(y_true))  # Display unique class labels in the true labels
+
+# Generate the confusion matrix
+cm = confusion_matrix(y_true, y_pred_classes)  # Generate confusion matrix
+print("Confusion Matrix:")  # Print confusion matrix
+print(cm)  # Display confusion matrix
+
+# Generate the classification report
+cr = classification_report(y_true, y_pred_classes, target_names=['N', 'N ', 'P'])  # Generate classification report
+print("Classification Report:")  # Print classification report
+print(cr)  # Display classification report
+
+# Plot training & validation accuracy values
+plt.plot(history.history['accuracy'])  # Plot training accuracy
+plt.plot(history.history['val_accuracy'])  # Plot validation accuracy
+plt.title('Model accuracy')  # Set plot title
+plt.ylabel('Accuracy')  # Set y-axis label
+plt.xlabel('Epoch')  # Set x-axis label
+plt.legend(['Train', 'Test'], loc='upper left')  # Add legend
+plt.show()  # Display plot
+
+# Plot training & validation loss values
+plt.plot(history.history['loss'])  # Plot training loss
+plt.plot(history.history['val_loss'])  # Plot validation loss
+plt.title('Model loss')  # Set plot title
+plt.ylabel('Loss')  # Set y-axis label
+plt.xlabel('Epoch')  # Set x-axis label
+plt.legend(['Train', 'Test'], loc='upper left')  # Add legend
+plt.show()  # Display plot
