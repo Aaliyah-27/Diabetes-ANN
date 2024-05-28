@@ -23,3 +23,14 @@ DataFrame['Gender'] = label_encoder.fit_transform(DataFrame['Gender'])
 # Handle missing values
 # Fill missing values with the mean of the column.
 DataFrame.fillna(DataFrame.mean(), inplace=True)
+
+from sklearn.preprocessing import OneHotEncoder
+
+# One-hot encode CLASS
+one_hot_encoder = OneHotEncoder(sparse_output=False)
+class_encoded = one_hot_encoder.fit_transform(DataFrame[['CLASS']])
+class_encoded_DataFrame = pd.DataFrame(class_encoded, columns=one_hot_encoder.categories_[0])
+
+# Drop the original CLASS column and concatenate the new one-hot encoded columns
+DataFrame = DataFrame.drop('CLASS', axis=1)
+DataFrame = pd.concat([DataFrame, class_encoded_DataFrame], axis=1)
