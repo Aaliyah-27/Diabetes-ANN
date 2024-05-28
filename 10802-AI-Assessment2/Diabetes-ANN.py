@@ -41,3 +41,15 @@ from sklearn.preprocessing import StandardScaler
 numerical_features = ['AGE', 'Urea', 'Cr', 'HbA1c', 'Chol', 'TG', 'HDL', 'LDL', 'VLDL', 'BMI']
 scaler = StandardScaler()
 DataFrame[numerical_features] = scaler.fit_transform(DataFrame[numerical_features])
+
+# Drop the ID and No_Pation columns as they are not useful for the model
+DataFrame = DataFrame.drop(['ID', 'No_Pation'], axis=1)
+
+from sklearn.model_selection import train_test_split
+
+# Define features (X) and target (y)
+X = DataFrame.drop(columns=['N', 'N ', 'P', 'Y', 'Y '])
+y = DataFrame[['N', 'N ', 'P', 'Y']]
+
+# Split the data into training and testing sets (80% train, 20% test)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
