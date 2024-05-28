@@ -34,3 +34,10 @@ class_encoded_DataFrame = pd.DataFrame(class_encoded, columns=one_hot_encoder.ca
 # Drop the original CLASS column and concatenate the new one-hot encoded columns
 DataFrame = DataFrame.drop('CLASS', axis=1)
 DataFrame = pd.concat([DataFrame, class_encoded_DataFrame], axis=1)
+
+from sklearn.preprocessing import StandardScaler
+
+# Standardize numerical features
+numerical_features = ['AGE', 'Urea', 'Cr', 'HbA1c', 'Chol', 'TG', 'HDL', 'LDL', 'VLDL', 'BMI']
+scaler = StandardScaler()
+DataFrame[numerical_features] = scaler.fit_transform(DataFrame[numerical_features])
